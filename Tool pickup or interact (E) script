@@ -1,0 +1,10 @@
+local Tool = script.Parent.Parent
+local ProximityPrompt = script.Parent.ProximityPrompt
+
+local TouchIntrest = script.Parent:WaitForChild("TouchInterest")
+TouchIntrest:Destroy()
+
+ProximityPrompt.Triggered:Connect(function(Player)
+	Tool.Parent = Player:WaitForChild("Backpack")
+	ProximityPrompt:Destroy()
+end)
