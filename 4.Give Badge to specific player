@@ -1,0 +1,43 @@
+-- Place this script inside a ServerScriptService or a LocalScript
+
+-- Define the badge ID that you want to give
+local badgeId = 123456789 -- Replace with the actual badge ID
+
+-- Define a table of player user IDs who should receive the badge
+local specificPlayers = {
+    [123456] = true, -- Replace with the user IDs of specific players
+    [789012] = true,
+    -- Add more user IDs if needed
+}
+
+-- Function to check if a player should receive the badge
+local function shouldReceiveBadge(player)
+    local userId = player.UserId
+    return specificPlayers[userId] == true
+end
+
+-- Event handler for player joining
+local function onPlayerAdded(player)
+    -- Check if the player should receive the badge
+    if shouldReceiveBadge(player) then
+        -- Give the badge to the player
+        local success, errorMsg = pcall(function()
+            game:GetService("BadgeService"):AwardBadge(player.UserId, badgeId)
+        end)
+        
+        if success then
+            print("Badge awarded to player:", player.Name)
+        else
+            warn("Failed to award badge to player:", player.Name)
+            warn("Error:", errorMsg)
+        end
+    end
+end
+
+-- Bind the event handler to the PlayerAdded event
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+
+-- Check all existing players when the script starts
+for _, player in ipairs(game.Players:GetPlayers()) do
+    onPlayerAdded(player)
+end
